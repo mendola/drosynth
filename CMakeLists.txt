@@ -8,7 +8,7 @@ add_subdirectory("resources/portaudio/bindings/cpp")
 
 # Option 1: Add sources manually:
 set(SOURCES 
-    src/file1.cpp
+    src/main.cpp
     src/waveform.cpp
     src/SineWave.cpp
 )

@@ -55,7 +55,11 @@ int main(int, char *[])
 		stream.start();
 
 		// Wait for 5 seconds:
-		sys.sleep(NUM_SECONDS * 1000);
+		//sys.sleep(NUM_SECONDS * 1000);
+		while (true) {
+			std::cin >> frequency;
+			sineGenerator.SetFrequency(frequency);
+		}
 
 		std::cout << "Closing stream..." <<std::endl;
 

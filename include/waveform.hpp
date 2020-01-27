@@ -4,6 +4,7 @@
 
 class WaveGenerator {
 public:
+	WaveGenerator();
 	~WaveGenerator();
     virtual int generate(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, 
 		const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags) = 0;

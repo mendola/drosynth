@@ -6,17 +6,21 @@ static constexpr double PI = 3.14159265;
 
 Sinewave::Sinewave(const float wavewaveform_length, const float sample_rate_hz, const float sine_frequency_hz)
 {
-    sine_frequency_hz_ = sine_frequency_hz;
     sample_rate_hz_ = sample_rate_hz;
-    waveform_size_ = sample_rate_hz_ /  sine_frequency_hz_;
-    waveform_ = new float[waveform_size_];
     left_phase_idx_ = 0;
     right_phase_idx_ = 0;
 
+    SetFrequency(sine_frequency_hz);
+}
+
+void Sinewave::SetFrequency(const float sine_frequency_hz) {
+    sine_frequency_hz_ = sine_frequency_hz;
+    waveform_size_ = sample_rate_hz_ /  sine_frequency_hz_;
     for (int i = 0; i < waveform_size_; ++i) {
         waveform_[i] = 0.125f * (float)sin(((double)i/(double)waveform_size_)*PI*2.);
     }
 }
+
 
 int Sinewave::generate(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, 
 		const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags)
