@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/alex/audio_processing/synthesis/resources/portaudio/test/patest_longsine.c
+stdio.h
+-
+math.h
+-
+portaudio.h
+/home/alex/audio_processing/synthesis/resources/portaudio/test/portaudio.h
+

@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/patest_longsine.dir/patest_longsine.o  -o patest_longsine -lportaudio_static 

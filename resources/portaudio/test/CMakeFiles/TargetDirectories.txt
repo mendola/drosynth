@@ -1,0 +1,3 @@
+/home/alex/audio_processing/synthesis/resources/portaudio/test/CMakeFiles/rebuild_cache.dir
+/home/alex/audio_processing/synthesis/resources/portaudio/test/CMakeFiles/patest_longsine.dir
+/home/alex/audio_processing/synthesis/resources/portaudio/test/CMakeFiles/edit_cache.dir
