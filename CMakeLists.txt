@@ -3,8 +3,8 @@ project(directory_test)
 # Bring in headers
 include_directories(include)
 set(CMAKE_BUILD_TYPE Debug)
-add_subdirectory("resources/portaudio/")
-add_subdirectory("resources/portaudio/bindings/cpp")
+add_subdirectory("third_party/portaudio/")
+add_subdirectory("third_party/portaudio/bindings/cpp")
 
 # Option 1: Add sources manually:
 set(SOURCES 
