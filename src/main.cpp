@@ -5,6 +5,8 @@
 #include <cassert>
 #include <cstddef>
 #include "portaudiocpp/PortAudioCpp.hxx"
+
+#include "waveform.hpp"
 #include "SineWave.hpp"
 
 // ---------------------------------------------------------------------------------------
@@ -32,7 +34,10 @@ int main(int, char *[])
 		std::cin >> frequency;
 		std::cout << "Setting up PortAudio..." << std::endl;
 
-		Sinewave sineGenerator(TABLE_SIZE, SAMPLE_RATE, frequency);
+		WaveGenerator waveGenerator;//TABLE_SIZE, SAMPLE_RATE, frequency);
+		Sinewave sw = Sinewave(SAMPLE_RATE, frequency, 0.125);
+		waveGenerator.AddOscillator(&sw);
+
 
 		std::cout << "Setting up PortAudio..." << std::endl;
 
@@ -46,8 +51,8 @@ int main(int, char *[])
 
 		std::cout << "Opening stereo output stream..." << std::endl;
 
-		// Create (and open) a new Stream, using the Sinewave::generate function as a callback:
-		portaudio::MemFunCallbackStream<Sinewave> stream(params, sineGenerator, &Sinewave::generate);
+		// Create (and open) a new Stream, using the WaveGenerator::generate function as a callback:
+		portaudio::MemFunCallbackStream<WaveGenerator> stream(params, waveGenerator, &WaveGenerator::generate);
 
 		std::cout << "Starting playback for " << NUM_SECONDS << " seconds." << std::endl;
 
@@ -57,8 +62,9 @@ int main(int, char *[])
 		// Wait for 5 seconds:
 		//sys.sleep(NUM_SECONDS * 1000);
 		while (true) {
+			std::cout << "Enter a frequency." << std::endl;
 			std::cin >> frequency;
-			sineGenerator.SetFrequency(frequency);
+			waveGenerator.SetAllOscFrequencies(frequency);
 		}
 
 		std::cout << "Closing stream..." <<std::endl;

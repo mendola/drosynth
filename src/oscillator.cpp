@@ -1,0 +1,12 @@
+#include "oscillator.hpp"
+
+Oscillator::Oscillator(const float sample_rate_hz, const float frequency, const float amplitude) :
+    sample_rate_hz_(sample_rate_hz), osc_frequency_(frequency), amplitude_(amplitude)
+{
+    period_in_samples_ = 1 + static_cast<size_t>(sample_rate_hz_/osc_frequency_);
+}
+
+void Oscillator::SetFrequency(const float new_frequency) {
+    osc_frequency_ = new_frequency;
+    period_in_samples_ = 1 + static_cast<size_t>(sample_rate_hz_/osc_frequency_);
+}

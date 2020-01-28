@@ -8,9 +8,11 @@ add_subdirectory("third_party/portaudio/bindings/cpp")
 
 # Option 1: Add sources manually:
 set(SOURCES 
-    src/main.cpp
     src/waveform.cpp
+    src/oscillator.cpp
     src/SineWave.cpp
+    src/main.cpp
+
 )
 
 # Option 2: Add by * with file(GLOB ... )
