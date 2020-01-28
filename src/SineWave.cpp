@@ -38,7 +38,7 @@ int Sinewave::generate(const void *inputBuffer, void *outputBuffer, unsigned lon
         if (left_phase_idx_ >= waveform_size_)
             left_phase_idx_ -= waveform_size_;
 
-        right_phase_idx_ += 3;
+        right_phase_idx_ += 1;
         if (right_phase_idx_ >= waveform_size_)
             right_phase_idx_ -= waveform_size_;
     }
