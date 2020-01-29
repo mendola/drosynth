@@ -57,7 +57,13 @@ void WaveGenerator::SetAllOscFrequencies(const float new_frequency) {
     for (Oscillator* osc : oscillators_) {
         osc->SetFrequency(new_frequency);
     }
+    SetMasterFrequency(new_frequency);
     Render();
+}
+
+void WaveGenerator::SetMasterFrequency(const float new_frequency) {
+    master_frequency_ = new_frequency;
+    waveform_size_ = SAMPLE_RATEB / master_frequency_;
 }
 
 void WaveGenerator::Render() {

@@ -11,5 +11,5 @@ Sinewave::Sinewave(const float sample_rate_hz, const float frequency, const floa
 }
 
 inline float Sinewave::computeAt(const uint32_t idx) {
-    return amplitude_ * (float)sin(((double)idx/(double)sample_rate_hz_*(double)osc_frequency_)*PI*2.);
+    return amplitude_ * (float)sin(((double)idx/(double)sample_rate_hz_*(double)osc_frequency_*(double)detune_factor_)*PI*2.);
 }

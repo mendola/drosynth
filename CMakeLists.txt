@@ -11,6 +11,7 @@ set(SOURCES
     src/waveform.cpp
     src/oscillator.cpp
     src/SineWave.cpp
+    src/squarewave.cpp
     src/main.cpp
 
 )

@@ -8,7 +8,7 @@
 
 #include "waveform.hpp"
 #include "SineWave.hpp"
-
+#include "squarewave.hpp"
 // ---------------------------------------------------------------------------------------
 
 // Some constants:
@@ -36,7 +36,15 @@ int main(int, char *[])
 
 		WaveGenerator waveGenerator;//TABLE_SIZE, SAMPLE_RATE, frequency);
 		Sinewave sw = Sinewave(SAMPLE_RATE, frequency, 0.125);
-		waveGenerator.AddOscillator(&sw);
+		Sinewave sw2 = Sinewave(SAMPLE_RATE, frequency, 0.125);
+		Squarewave sq = Squarewave(SAMPLE_RATE, frequency, 0.03);
+		sw.Detune(2);
+		sw2.Detune(5);
+		//sw2.Detune(2);
+		waveGenerator.AddOscillator(&sq);
+		waveGenerator.AddOscillator(&sw2);
+		waveGenerator.AddOscillator(&sq);
+		waveGenerator.SetAllOscFrequencies(frequency);
 
 
 		std::cout << "Setting up PortAudio..." << std::endl;
