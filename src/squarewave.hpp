@@ -9,4 +9,5 @@ public:
     int generate(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, 
 		const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags);
     inline float computeAt(const uint32_t idx);
+    inline void SuperimposeNextSamples(float** out, uint32_t num_samples);
 };

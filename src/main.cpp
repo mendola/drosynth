@@ -37,11 +37,11 @@ int main(int, char *[])
 		WaveGenerator waveGenerator;//TABLE_SIZE, SAMPLE_RATE, frequency);
 		Sinewave sw = Sinewave(SAMPLE_RATE, frequency, 0.125);
 		Sinewave sw2 = Sinewave(SAMPLE_RATE, frequency, 0.125);
-		Squarewave sq = Squarewave(SAMPLE_RATE, frequency, 0.03);
-		sw.Detune(2);
-		sw2.Detune(5);
+		Squarewave sq = Squarewave(SAMPLE_RATE, frequency, 0.05);
+		//sw.Detune(2);
+		sw2.Detune(1.01);
 		//sw2.Detune(2);
-		waveGenerator.AddOscillator(&sq);
+		waveGenerator.AddOscillator(&sw);
 		waveGenerator.AddOscillator(&sw2);
 		waveGenerator.AddOscillator(&sq);
 		waveGenerator.SetAllOscFrequencies(frequency);
