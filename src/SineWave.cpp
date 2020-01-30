@@ -24,7 +24,7 @@ void Sinewave::SuperimposeNextSamples(float** out, uint32_t num_samples) {
         out[1][i] += new_sample;
         ++phase_index_;
         if (phase_index_ >= period_in_samples_) {
-            phase_index_ -= period_in_samples_;
+            phase_index_ = 0;
         }
     }
 }

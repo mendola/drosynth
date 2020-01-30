@@ -9,6 +9,8 @@
 #include "waveform.hpp"
 #include "SineWave.hpp"
 #include "squarewave.hpp"
+#include "trianglewave.hpp"
+
 // ---------------------------------------------------------------------------------------
 
 // Some constants:
@@ -35,15 +37,19 @@ int main(int, char *[])
 		std::cout << "Setting up PortAudio..." << std::endl;
 
 		WaveGenerator waveGenerator;//TABLE_SIZE, SAMPLE_RATE, frequency);
-		Sinewave sw = Sinewave(SAMPLE_RATE, frequency, 0.125);
-		Sinewave sw2 = Sinewave(SAMPLE_RATE, frequency, 0.125);
-		Squarewave sq = Squarewave(SAMPLE_RATE, frequency, 0.05);
-		//sw.Detune(2);
-		sw2.Detune(1.01);
+		Sinewave sw = Sinewave(SAMPLE_RATE, frequency, 0.425);
+		Sinewave sw2 = Sinewave(SAMPLE_RATE, frequency, 0.1);
+		Squarewave sq = Squarewave(SAMPLE_RATE, frequency, 0.125);
+		TriangleWave tr = TriangleWave(SAMPLE_RATE, frequency, 0.125);
+
+		sw.Detune(2.0);
+		sw2.Detune(1.0);
 		//sw2.Detune(2);
+		tr.Detune(1);
 		waveGenerator.AddOscillator(&sw);
-		waveGenerator.AddOscillator(&sw2);
+		//waveGenerator.AddOscillator(&sw2);
 		waveGenerator.AddOscillator(&sq);
+		waveGenerator.AddOscillator(&tr);
 		waveGenerator.SetAllOscFrequencies(frequency);
 
 
@@ -69,7 +75,7 @@ int main(int, char *[])
 
 		// Wait for 5 seconds:
 		//sys.sleep(NUM_SECONDS * 1000);
-		while (true) {
+		while (frequency > 0.1) {
 			std::cout << "Enter a frequency." << std::endl;
 			std::cin >> frequency;
 			waveGenerator.SetAllOscFrequencies(frequency);

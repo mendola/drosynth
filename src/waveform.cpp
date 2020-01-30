@@ -14,7 +14,8 @@ int WaveGenerator::generate(const void *inputBuffer, void *outputBuffer, unsigne
     float **out = static_cast<float **>(outputBuffer);
 
     ClearStereoWaveform(out, framesPerBuffer);
-
+    static int i = 0;
+    //std::cout << ++i<< " " << statusFlags << std::endl;
     for (Oscillator* osc : oscillators_) {
         osc->SuperimposeNextSamples(out, framesPerBuffer);
     }

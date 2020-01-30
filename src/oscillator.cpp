@@ -5,14 +5,14 @@ Oscillator::Oscillator(const float sample_rate_hz, const float frequency, const 
     osc_frequency_(frequency), 
     amplitude_(amplitude)
 {
-    period_in_samples_ = 1 + static_cast<size_t>(sample_rate_hz_/osc_frequency_);
+    period_in_samples_ = static_cast<size_t>(sample_rate_hz_/osc_frequency_);
     detune_factor_ = 1.0;
     phase_index_ = 0;
 }
 
 void Oscillator::SetFrequency(const float new_frequency) {
     osc_frequency_ = new_frequency;
-    period_in_samples_ = 1 + static_cast<size_t>(sample_rate_hz_/(osc_frequency_*detune_factor_));
+    period_in_samples_ = static_cast<size_t>(sample_rate_hz_/(osc_frequency_*detune_factor_));
     phase_index_ = 0;//period_in_samples_ % phase_index_;
 }
 

@@ -12,8 +12,8 @@ set(SOURCES
     src/oscillator.cpp
     src/SineWave.cpp
     src/squarewave.cpp
+    src/trianglewave.cpp
     src/main.cpp
-
 )
 
 # Option 2: Add by * with file(GLOB ... )
