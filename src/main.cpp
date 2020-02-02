@@ -24,8 +24,8 @@ const int TABLE_SIZE = 200;
 // ---------------------------------------------------------------------------------------
 
 // main:
-int main(int, char *[]);
-int main(int, char *[])
+int ma3in(int, char *[]);
+int ma3in(int, char *[])
 {
 	float frequency = 0;
 	try
