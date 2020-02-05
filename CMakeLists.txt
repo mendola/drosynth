@@ -23,7 +23,9 @@ set(SOURCES
     src/squarewave.cpp
     src/trianglewave.cpp
     src/main.cpp
-    src/miditest.cpp
+    src/midievent.cpp
+    src/midiinput.cpp
+   # src/miditest.cpp
 )
 
 # Option 2: Add by * with file(GLOB ... )

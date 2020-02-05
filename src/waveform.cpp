@@ -1,6 +1,6 @@
 #include "waveform.hpp"
 #include <cassert>
-
+#include <iostream>
 static constexpr double MIN_FREQUENCY = 20.0;  // Hz
 static constexpr double SAMPLE_RATEB = 44100.0;  // Hz
 static constexpr int MAX_WAVEFORM_LENGTH = 1 + static_cast<int>(SAMPLE_RATEB / MIN_FREQUENCY);
@@ -28,6 +28,7 @@ void WaveGenerator::AddOscillator(Oscillator* osc) {
 }
 
 void WaveGenerator::SetAllOscFrequencies(const float new_frequency) {
+    std::cout << "New Frequency: "<<new_frequency<<std::endl;
     for (Oscillator* osc : oscillators_) {
         osc->SetFrequency(new_frequency);
     }

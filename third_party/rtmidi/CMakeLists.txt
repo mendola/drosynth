@@ -235,7 +235,6 @@ string(REPLACE ";" " " api "${API_DEFS}")
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/rtmidi.pc.in" "rtmidi.pc" @ONLY)
 
 # Add install rule.
-message("&&&&&&&&&&&&&&&&&&&" ${CMAKE_INSTALL_LIBDIR})
 install(TARGETS ${LIB_TARGETS}
         EXPORT RtMidiTargets
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

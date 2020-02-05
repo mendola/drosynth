@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cassert>
 #include <cstddef>
+#include <functional>
 #include "portaudiocpp/PortAudioCpp.hxx"
 
 #include "waveform.hpp"
@@ -11,6 +12,9 @@
 #include "squarewave.hpp"
 #include "trianglewave.hpp"
 
+// Midi stuff
+#include "midiinput.hpp"
+#include "midievent.hpp"
 // ---------------------------------------------------------------------------------------
 
 // Some constants:
@@ -24,23 +28,23 @@ const int TABLE_SIZE = 200;
 // ---------------------------------------------------------------------------------------
 
 // main:
-int ma3in(int, char *[]);
-int ma3in(int, char *[])
+
+int main(int, char *[]);
+int main(int, char *[])
 {
-	float frequency = 0;
 	try
 	{
-		// Create a SineWave object:
-		std::cout << "Enter a frequency: " << std::endl;
-
-		std::cin >> frequency;
-		std::cout << "Setting up PortAudio..." << std::endl;
-
 		WaveGenerator waveGenerator;//TABLE_SIZE, SAMPLE_RATE, frequency);
-		Sinewave sw = Sinewave(SAMPLE_RATE, frequency, 0.425);
-		Sinewave sw2 = Sinewave(SAMPLE_RATE, frequency, 0.1);
-		Squarewave sq = Squarewave(SAMPLE_RATE, frequency, 0.125);
-		TriangleWave tr = TriangleWave(SAMPLE_RATE, frequency, 0.125);
+		Sinewave sw = Sinewave(SAMPLE_RATE, 0, 0.425);
+		Sinewave sw2 = Sinewave(SAMPLE_RATE, 0, 0.1);
+		Squarewave sq = Squarewave(SAMPLE_RATE, 0, 0.125);
+		TriangleWave tr = TriangleWave(SAMPLE_RATE, 0, 0.125);
+
+		MidiInput minilogue;
+		minilogue.Start();
+		minilogue.SetExternalNoteOnCallback((noteoncallback)std::bind(&WaveGenerator::SetAllOscFrequencies,
+																	  &waveGenerator,
+																	  std::placeholders::_1));
 
 		sw.Detune(2.0);
 		sw2.Detune(1.0);
@@ -50,8 +54,6 @@ int ma3in(int, char *[])
 		//waveGenerator.AddOscillator(&sw2);
 		waveGenerator.AddOscillator(&sq);
 		waveGenerator.AddOscillator(&tr);
-		waveGenerator.SetAllOscFrequencies(frequency);
-
 
 		std::cout << "Setting up PortAudio..." << std::endl;
 
@@ -75,11 +77,11 @@ int ma3in(int, char *[])
 
 		// Wait for 5 seconds:
 		//sys.sleep(NUM_SECONDS * 1000);
-		while (frequency > 0.1) {
-			std::cout << "Enter a frequency." << std::endl;
-			std::cin >> frequency;
-			waveGenerator.SetAllOscFrequencies(frequency);
-		}
+
+		std::cout << "Press any keyboard to stop" << std::endl;
+
+		int i = 0;
+		std::cin >> i;
 
 		std::cout << "Closing stream..." <<std::endl;
 
@@ -114,5 +116,3 @@ int ma3in(int, char *[])
 
 	return 0;
 }
-
-
