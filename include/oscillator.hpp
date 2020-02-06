@@ -13,6 +13,6 @@ protected:
     float osc_frequency_;
     float detune_factor_;
     float amplitude_;
-    uint32_t phase_index_;
-    size_t period_in_samples_;
+    float continuous_sample_index_;
+    float period_in_fractional_samples_;
 };

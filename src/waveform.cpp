@@ -6,8 +6,6 @@ static constexpr double SAMPLE_RATEB = 44100.0;  // Hz
 static constexpr int MAX_WAVEFORM_LENGTH = 1 + static_cast<int>(SAMPLE_RATEB / MIN_FREQUENCY);
 
 
-
-
 int WaveGenerator::generate(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, 
 		const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags)
 {

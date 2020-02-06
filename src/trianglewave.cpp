@@ -17,23 +17,23 @@ inline float TriangleWave::computeAt(const uint32_t idx) {
 
 inline void TriangleWave::SuperimposeNextSamples(float** out, uint32_t num_samples) {
     if (out == NULL || *out==NULL) return;
-    const float dy_dsample = amplitude_ / period_in_samples_ / 4;
-    const uint32_t pos_peak_idx = period_in_samples_ / 4;
-    const uint32_t neg_peak_idx =  period_in_samples_ * 3 / 4;
+    const float dy_dsample = amplitude_ / period_in_fractional_samples_ / 4;
+    const uint32_t pos_peak_idx = period_in_fractional_samples_ / 4;
+    const uint32_t neg_peak_idx =  period_in_fractional_samples_ * 3 / 4;
     static float new_sample = 0;
     for (uint32_t i=0; i<num_samples; ++i) {
-        if (phase_index_ < pos_peak_idx) {
-            new_sample = phase_index_ * dy_dsample;
-        } else if (phase_index_ < neg_peak_idx) {
-            new_sample = (2. * amplitude_) - ((phase_index_ - pos_peak_idx) * dy_dsample) ;
+        if (continuous_sample_index_ < pos_peak_idx) {
+            new_sample = continuous_sample_index_ * dy_dsample;
+        } else if (continuous_sample_index_ < neg_peak_idx) {
+            new_sample = (2. * amplitude_) - ((continuous_sample_index_ - pos_peak_idx) * dy_dsample) ;
         } else {
-            new_sample = (-2. * amplitude_) + ((phase_index_ - neg_peak_idx) * dy_dsample) ;
+            new_sample = (-2. * amplitude_) + ((continuous_sample_index_ - neg_peak_idx) * dy_dsample) ;
         }
         out[0][i] += new_sample;
         out[1][i] += new_sample;
-        ++phase_index_;
-        if (phase_index_ >= period_in_samples_ ){
-            phase_index_ = 0;
+        continuous_sample_index_ += 1.0;
+        if (continuous_sample_index_ >= period_in_fractional_samples_ ){
+            continuous_sample_index_ -= period_in_fractional_samples_;
         }
     }
 }
