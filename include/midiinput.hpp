@@ -7,6 +7,8 @@
 //typedef void (*callbackfunction) (double, std::vector< unsigned char >*, void *);
 typedef std::function<void(float)> noteoncallback;
 typedef std::function<void()> noteoffcallback;
+typedef std::function<void(unsigned int, float)> knobturncallback;
+
 
 class MidiInput {
 public:
@@ -16,9 +18,12 @@ public:
     //void SetCallbackFunction(callbackfunction func);
     void SetExternalNoteOnCallback(noteoncallback func);
     void SetExternalNoteOffCallback(noteoffcallback func);
+    void SetExternalKnobTurnCallback(knobturncallback func);
     //callbackfunction external_callback_ = NULL;
     noteoncallback midiNoteOnCallback = NULL;
     noteoffcallback midiNoteOffCallback = NULL;
+    knobturncallback knobTurnCallback = NULL;
+
 private:
     int FindAndOpenDevice();
     void defaultCallback( double deltatime, std::vector< unsigned char > *message, void *userData );

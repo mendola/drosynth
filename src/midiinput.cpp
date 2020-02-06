@@ -20,18 +20,23 @@ void midiEventCallback( double deltatime, std::vector< unsigned char > *message,
         std::cout << "stamp = " << deltatime << std::endl;
     }
 
-    MidiEvent evt = MidiEvent(deltatime, message, userData);
-    std::cout << evt.frequency_ << std::endl;
+    eventtype_t eventtype = GetMidiEventType(deltatime, message, userData);
 
-    if (evt.event_type_ == NOTE_ON
+    if (eventtype == NOTE_ON
             && caller != NULL
             && caller->midiNoteOnCallback != NULL) {
+        NoteOnEvent evt = NoteOnEvent(deltatime, message, userData);
         caller->midiNoteOnCallback(evt.frequency_);
-    }
-    if (evt.event_type_ == NOTE_OFF
+    } else if (eventtype == NOTE_OFF
             && caller != NULL
             && caller->midiNoteOffCallback != NULL) {
+        NoteOffEvent evt = NoteOffEvent(deltatime, message, userData);
         caller->midiNoteOffCallback();
+    } else if (eventtype == KNOB_TURN
+            && caller != NULL
+            && caller->knobTurnCallback != NULL) {
+        KnobTurnEvent evt = KnobTurnEvent(deltatime, message, userData);
+        caller->knobTurnCallback(evt.knob_id_, evt.knob_value_);
     }
 }
 
@@ -80,4 +85,8 @@ void MidiInput::SetExternalNoteOnCallback(noteoncallback func) {
 
 void MidiInput::SetExternalNoteOffCallback(noteoffcallback func) {
     midiNoteOffCallback = func;
+}
+
+void MidiInput::SetExternalKnobTurnCallback(knobturncallback func) {
+    knobTurnCallback = func;
 }

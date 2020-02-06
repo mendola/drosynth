@@ -6,6 +6,8 @@ static constexpr double SAMPLE_RATEB = 44100.0;  // Hz
 static constexpr int MAX_WAVEFORM_LENGTH = 1 + static_cast<int>(SAMPLE_RATEB / MIN_FREQUENCY);
 
 
+
+
 int WaveGenerator::generate(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, 
 		const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags)
 {
@@ -19,6 +21,8 @@ int WaveGenerator::generate(const void *inputBuffer, void *outputBuffer, unsigne
     for (Oscillator* osc : oscillators_) {
         osc->SuperimposeNextSamples(out, framesPerBuffer);
     }
+
+    ScaleStereoWaveformVolume(out, framesPerBuffer);
 
     return paContinue;
 }
@@ -40,5 +44,28 @@ inline void WaveGenerator::ClearStereoWaveform(float** out, uint32_t num_samples
     for (size_t i=0; i<num_samples; ++i) {
         out[0][i] = 0;
         out[1][i] = 0;
+    }
+}
+
+inline void WaveGenerator::ScaleStereoWaveformVolume(float** out, uint32_t num_samples) {
+    if (out == NULL || *out==NULL) return;
+
+    for (size_t i=0; i<num_samples; ++i) {
+        out[0][i] *= master_volume_;
+        out[1][i] *= master_volume_;
+    }
+}
+
+void WaveGenerator::SetMasterVolume(const float new_amplitude) {
+    master_volume_ = new_amplitude;
+}
+
+void WaveGenerator::HandleKnobTurn(const unsigned int knob_id, const float knob_value) {
+    switch (knob_id) {
+        case 34:
+            SetMasterVolume(knob_value);
+            break;
+        default:
+            break;
     }
 }

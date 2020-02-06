@@ -23,8 +23,6 @@ const double SAMPLE_RATE = 44100.0;
 const int FRAMES_PER_BUFFER = 64;
 const int TABLE_SIZE = 200;
 
-
-
 // ---------------------------------------------------------------------------------------
 
 // main:
@@ -35,10 +33,10 @@ int main(int, char *[])
 	try
 	{
 		WaveGenerator waveGenerator;//TABLE_SIZE, SAMPLE_RATE, frequency);
-		Sinewave sw = Sinewave(SAMPLE_RATE, 0, 0.425);
-		Sinewave sw2 = Sinewave(SAMPLE_RATE, 0, 0.1);
-		Squarewave sq = Squarewave(SAMPLE_RATE, 0, 0.125);
-		TriangleWave tr = TriangleWave(SAMPLE_RATE, 0, 0.125);
+		Sinewave sw = Sinewave(SAMPLE_RATE, 100, 0.425);
+		Sinewave sw2 = Sinewave(SAMPLE_RATE, 100, 0.1);
+		Squarewave sq = Squarewave(SAMPLE_RATE, 100, 0.125);
+		TriangleWave tr = TriangleWave(SAMPLE_RATE, 100, 0.125);
 
 		MidiInput minilogue;
 		minilogue.Start();
@@ -46,6 +44,11 @@ int main(int, char *[])
 																	  &waveGenerator,
 																	  std::placeholders::_1));
 
+		minilogue.SetExternalKnobTurnCallback((knobturncallback)std::bind(&WaveGenerator::HandleKnobTurn,
+																	  &waveGenerator,
+																	  std::placeholders::_1,
+																	  std::placeholders::_2));
+	
 		sw.Detune(2.0);
 		sw2.Detune(1.0);
 		//sw2.Detune(2);
