@@ -6,7 +6,7 @@ static constexpr double SAMPLE_RATEB = 44100.0;  // Hz
 static constexpr int MAX_WAVEFORM_LENGTH = 1 + static_cast<int>(SAMPLE_RATEB / MIN_FREQUENCY);
 
 
-int WaveGenerator::generate(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, 
+int Synthesizer::generate(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, 
 		const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags)
 {
     assert(outputBuffer != NULL);
@@ -27,15 +27,15 @@ int WaveGenerator::generate(const void *inputBuffer, void *outputBuffer, unsigne
     return paContinue;
 }
 
-void WaveGenerator::AddVCO(VCO* osc) {
+void Synthesizer::AddVCO(VCO* osc) {
     oscillators_.push_back(osc);
 }
 
-void WaveGenerator::AddVCA(VCA* vca) {
+void Synthesizer::AddVCA(VCA* vca) {
     amplifier_ = vca;
 }
 
-void WaveGenerator::NoteOn(const float new_frequency, const float amplitude) {
+void Synthesizer::NoteOn(const float new_frequency, const float amplitude) {
     std::cout << "New Frequency: "<<new_frequency<<std::endl;
     for (VCO* osc : oscillators_) {
         osc->SetFrequency(new_frequency);
@@ -44,7 +44,7 @@ void WaveGenerator::NoteOn(const float new_frequency, const float amplitude) {
     amplifier_->SetGainIn(amplitude);
 }
 
-inline void WaveGenerator::ClearStereoWaveform(float** out, uint32_t num_samples) {
+inline void Synthesizer::ClearStereoWaveform(float** out, uint32_t num_samples) {
     if (out == NULL || *out==NULL) return;
 
     for (size_t i=0; i<num_samples; ++i) {
@@ -53,7 +53,7 @@ inline void WaveGenerator::ClearStereoWaveform(float** out, uint32_t num_samples
     }
 }
 
-inline void WaveGenerator::ScaleStereoWaveformVolume(float** out, uint32_t num_samples) {
+inline void Synthesizer::ScaleStereoWaveformVolume(float** out, uint32_t num_samples) {
     if (out == NULL || *out==NULL) return;
 
     for (size_t i=0; i<num_samples; ++i) {
@@ -62,17 +62,17 @@ inline void WaveGenerator::ScaleStereoWaveformVolume(float** out, uint32_t num_s
     }
 }
 
-void WaveGenerator::SetMasterVolume(const float new_amplitude) {
+void Synthesizer::SetMasterVolume(const float new_amplitude) {
     master_volume_ = new_amplitude;
 }
 
-void WaveGenerator::SetSingleOscAmplitude(const unsigned int idx, const float amplitude) {
+void Synthesizer::SetSingleOscAmplitude(const unsigned int idx, const float amplitude) {
     if (idx < oscillators_.size()) {
         oscillators_.at(idx)->SetAmplitude(amplitude);
     }
 }
 
-void WaveGenerator::HandleKnobTurn(const unsigned int knob_id, const float knob_value) {
+void Synthesizer::HandleKnobTurn(const unsigned int knob_id, const float knob_value) {
     switch (knob_id) {
         case 34:
             SetMasterVolume(knob_value);
@@ -91,6 +91,6 @@ void WaveGenerator::HandleKnobTurn(const unsigned int knob_id, const float knob_
     }
 }
 
-void WaveGenerator::NoteOff() {
+void Synthesizer::NoteOff() {
     amplifier_->SetGainIn(0.0);
 }

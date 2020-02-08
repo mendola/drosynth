@@ -6,7 +6,7 @@
 #include "vca.hpp"
 #include "portaudiocpp/PortAudioCpp.hxx"
 
-class WaveGenerator {
+class Synthesizer {
 public:
 	void AddVCO(VCO* osc); 
 	void AddVCA(VCA* vca);

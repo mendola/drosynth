@@ -32,7 +32,7 @@ int main(int, char *[])
 {
 	try
 	{
-		WaveGenerator waveGenerator;//TABLE_SIZE, SAMPLE_RATE, frequency);
+		Synthesizer waveGenerator;//TABLE_SIZE, SAMPLE_RATE, frequency);
 		Sinewave sw = Sinewave(SAMPLE_RATE, 100, 0.125);
 		Squarewave sq = Squarewave(SAMPLE_RATE, 100, 0.125);
 		TriangleWave tr = TriangleWave(SAMPLE_RATE, 100, 0.125);
@@ -41,15 +41,15 @@ int main(int, char *[])
 
 		MidiInput minilogue;
 		minilogue.Start();
-		minilogue.SetExternalNoteOnCallback((noteoncallback)std::bind(&WaveGenerator::NoteOn,
+		minilogue.SetExternalNoteOnCallback((noteoncallback)std::bind(&Synthesizer::NoteOn,
 																	  &waveGenerator,
 																	  std::placeholders::_1,
 																	  std::placeholders::_2));
 
-		minilogue.SetExternalNoteOffCallback((noteoffcallback)std::bind(&WaveGenerator::NoteOff,
+		minilogue.SetExternalNoteOffCallback((noteoffcallback)std::bind(&Synthesizer::NoteOff,
 																	  &waveGenerator));
 
-		minilogue.SetExternalKnobTurnCallback((knobturncallback)std::bind(&WaveGenerator::HandleKnobTurn,
+		minilogue.SetExternalKnobTurnCallback((knobturncallback)std::bind(&Synthesizer::HandleKnobTurn,
 																	  &waveGenerator,
 																	  std::placeholders::_1,
 																	  std::placeholders::_2));
@@ -74,8 +74,8 @@ int main(int, char *[])
 
 		std::cout << "Opening stereo output stream..." << std::endl;
 
-		// Create (and open) a new Stream, using the WaveGenerator::generate function as a callback:
-		portaudio::MemFunCallbackStream<WaveGenerator> stream(params, waveGenerator, &WaveGenerator::generate);
+		// Create (and open) a new Stream, using the Synthesizer::generate function as a callback:
+		portaudio::MemFunCallbackStream<Synthesizer> stream(params, waveGenerator, &Synthesizer::generate);
 
 		std::cout << "Starting playback for " << NUM_SECONDS << " seconds." << std::endl;
 
