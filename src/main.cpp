@@ -7,14 +7,7 @@
 #include <functional>
 #include "portaudiocpp/PortAudioCpp.hxx"
 
-#include "waveform.hpp"
-#include "SineWave.hpp"
-#include "squarewave.hpp"
-#include "trianglewave.hpp"
-
-// Midi stuff
-#include "midiinput.hpp"
-#include "midievent.hpp"
+#include "synthesizer.hpp"
 // ---------------------------------------------------------------------------------------
 
 // Some constants:
@@ -33,34 +26,6 @@ int main(int, char *[])
 	try
 	{
 		Synthesizer waveGenerator;//TABLE_SIZE, SAMPLE_RATE, frequency);
-		Sinewave sw = Sinewave(SAMPLE_RATE, 100, 0.125);
-		Squarewave sq = Squarewave(SAMPLE_RATE, 100, 0.125);
-		TriangleWave tr = TriangleWave(SAMPLE_RATE, 100, 0.125);
-
-		VCA vca = VCA();
-
-		MidiInput minilogue;
-		minilogue.Start();
-		minilogue.SetExternalNoteOnCallback((noteoncallback)std::bind(&Synthesizer::NoteOn,
-																	  &waveGenerator,
-																	  std::placeholders::_1,
-																	  std::placeholders::_2));
-
-		minilogue.SetExternalNoteOffCallback((noteoffcallback)std::bind(&Synthesizer::NoteOff,
-																	  &waveGenerator));
-
-		minilogue.SetExternalKnobTurnCallback((knobturncallback)std::bind(&Synthesizer::HandleKnobTurn,
-																	  &waveGenerator,
-																	  std::placeholders::_1,
-																	  std::placeholders::_2));
-	
-		sw.Detune(1.0);
-		sq.Detune(1.0);
-		tr.Detune(1.0);
-		waveGenerator.AddVCO(&sw);
-		waveGenerator.AddVCO(&sq);
-		waveGenerator.AddVCO(&tr);
-		waveGenerator.AddVCA(&vca);
 
 		std::cout << "Setting up PortAudio..." << std::endl;
 

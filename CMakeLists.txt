@@ -17,9 +17,10 @@ add_subdirectory("third_party/rtmidi/")
 
 # Option 1: Add sources manually:
 set(SOURCES 
-    src/waveform.cpp
+    src/synthesizer.cpp
     src/oscillator.cpp
     src/vca.cpp
+    src/voice.cpp
     src/SineWave.cpp
     src/squarewave.cpp
     src/trianglewave.cpp

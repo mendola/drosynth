@@ -13,12 +13,12 @@ void midiEventCallback( double deltatime, std::vector< unsigned char > *message,
 {
     MidiInput* caller = (MidiInput*)userData;
     unsigned int nBytes = message->size();
-    for ( unsigned int i=0; i<nBytes; i++ ) {
-        std::cout << "Byte " << i << " = " << (int)message->at(i) << ", ";
-    }
-    if ( nBytes > 0 ) {
-        std::cout << "stamp = " << deltatime << std::endl;
-    }
+    // for ( unsigned int i=0; i<nBytes; i++ ) {
+    //     std::cout << "Byte " << i << " = " << (int)message->at(i) << ", ";
+    // }
+    // if ( nBytes > 0 ) {
+    //     std::cout << "stamp = " << deltatime << std::endl;
+    // }
 
     eventtype_t eventtype = GetMidiEventType(deltatime, message, userData);
 
@@ -26,12 +26,12 @@ void midiEventCallback( double deltatime, std::vector< unsigned char > *message,
             && caller != NULL
             && caller->midiNoteOnCallback != NULL) {
         NoteOnEvent evt = NoteOnEvent(deltatime, message, userData);
-        caller->midiNoteOnCallback(evt.frequency_,evt.velocity_);
+        caller->midiNoteOnCallback(NoteOnEvent(evt));
     } else if (eventtype == NOTE_OFF
             && caller != NULL
             && caller->midiNoteOffCallback != NULL) {
         NoteOffEvent evt = NoteOffEvent(deltatime, message, userData);
-        caller->midiNoteOffCallback();
+        caller->midiNoteOffCallback(evt);
     } else if (eventtype == KNOB_TURN
             && caller != NULL
             && caller->knobTurnCallback != NULL) {

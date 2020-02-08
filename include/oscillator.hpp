@@ -5,14 +5,16 @@ class VCO {
 public:
     VCO(const float sample_rate_hz, const float frequency, const float amplitude);
     void SetFrequency(const float new_frequency);
+    void SetEnabled(const bool state);
     void Detune(const float detune_factor);
     virtual inline float computeAt(const uint32_t idx) = 0;
     virtual inline void SuperimposeNextSamples(float** out, uint32_t num_samples) = 0;
     void SetAmplitude(const float amplitude);
-    void SetFrequencyAndAmplitude(const float new_frequency, const float amplitude);
+    //void SetFrequencyAndAmplitude(const float new_frequency, const float amplitude);
     void NoteOff();
 protected:
     // Inputs
+    bool is_enabled_ = false;
     float v_in_;
     float osc_frequency_;
     float detune_factor_;

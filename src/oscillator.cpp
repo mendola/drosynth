@@ -12,11 +12,6 @@ VCO::VCO(const float sample_rate_hz, const float frequency, const float amplitud
     continuous_sample_index_ = 0.0;
 }
 
-void VCO::SetFrequencyAndAmplitude(const float new_frequency, const float amplitude) {
-    SetFrequency(new_frequency);
-    SetAmplitude(amplitude);
-}
-
 void VCO::SetFrequency(const float new_frequency) {
     osc_frequency_ = new_frequency;
     const float prev_period_in_fractional_samples = period_in_fractional_samples_;
@@ -30,4 +25,8 @@ void VCO::Detune(const float detune_factor) {
 
 void VCO::SetAmplitude(const float amplitude) {
     v_in_ = amplitude;
+}
+
+void VCO::SetEnabled(const bool state) {
+    is_enabled_ = state;
 }

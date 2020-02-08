@@ -29,6 +29,7 @@ public:
     NoteOnEvent(double timeStamp, std::vector<unsigned char> *message, void *userData);
     float frequency_;
     float velocity_;
+    unsigned int key_id_;
 protected:
     inline float ParseFrequency();
     inline float ParseVelocity();
@@ -39,6 +40,7 @@ public:
     NoteOffEvent(double timeStamp, std::vector<unsigned char> *message, void *userData);
     float frequency_;
     float velocity_;
+    unsigned int key_id_;
 protected:
     inline float ParseFrequency();
     inline float ParseVelocity();

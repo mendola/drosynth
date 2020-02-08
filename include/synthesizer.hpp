@@ -2,19 +2,28 @@
 
 #include <vector>
 
-#include "oscillator.hpp"
+#include "voice.hpp"
 #include "vca.hpp"
+#include "midiinput.hpp"
 #include "portaudiocpp/PortAudioCpp.hxx"
+
+static constexpr unsigned int NUM_VOICES = 5;
+
+typedef struct note {
+	NoteOnEvent key_evt;
+	Voice* voice;
+} Note;
 
 class Synthesizer {
 public:
-	void AddVCO(VCO* osc); 
+	Synthesizer();
+	//void AddVCO(VCO* osc); 
 	void AddVCA(VCA* vca);
     int generate(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, 
 		const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags);
 	void HandleKnobTurn(const unsigned int knob_id, const float knob_value);
-	void NoteOff();
-	void NoteOn(const float new_frequency, const float amplitute);
+	void NoteOff(NoteOffEvent evt);
+	void NoteOn(NoteOnEvent evt);
 
 	// Oscillator modulation 
 	void SetAllOscFrequencies(const float new_frequency);
@@ -29,8 +38,15 @@ private:
 	inline void ScaleStereoWaveformVolume(float** out, uint32_t num_samples);
 protected:
 
-	std::vector<VCO*> oscillators_;
+	MidiInput minilogue;
+
+	std::vector<Note> keys_pressed_;
+
+	std::vector<Voice*> voices_;
+
 	VCA* amplifier_;
 
 	float master_volume_ = 1.0;
+
+	unsigned int total_num_oscillators_ = 0;
 };
