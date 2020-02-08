@@ -26,7 +26,7 @@ inline float NoteOnEvent::ParseFrequency() {
 }
 
 inline float NoteOnEvent::ParseVelocity() {
-    return 127.0 / (float)message_->at(2);
+    return (float)message_->at(2) / 127.0;
 }
 
 /************ NoteOffEvent **************************/

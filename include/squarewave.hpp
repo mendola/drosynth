@@ -3,7 +3,7 @@
 #include "waveform.hpp"
 #include "oscillator.hpp"
 
-class Squarewave : public Oscillator {
+class Squarewave : public VCO {
 public:
     Squarewave(const float sample_rate_hz, const float frequency, const float amplitude);
     int generate(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, 

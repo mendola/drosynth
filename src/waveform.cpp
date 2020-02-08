@@ -16,24 +16,32 @@ int WaveGenerator::generate(const void *inputBuffer, void *outputBuffer, unsigne
     ClearStereoWaveform(out, framesPerBuffer);
     static int i = 0;
     //std::cout << ++i<< " " << statusFlags << std::endl;
-    for (Oscillator* osc : oscillators_) {
+    for (VCO* osc : oscillators_) {
         osc->SuperimposeNextSamples(out, framesPerBuffer);
     }
 
-    ScaleStereoWaveformVolume(out, framesPerBuffer);
+    amplifier_->OperateOnSignal(out, framesPerBuffer);
 
+    ScaleStereoWaveformVolume(out, framesPerBuffer);
+    
     return paContinue;
 }
 
-void WaveGenerator::AddOscillator(Oscillator* osc) {
+void WaveGenerator::AddVCO(VCO* osc) {
     oscillators_.push_back(osc);
 }
 
-void WaveGenerator::SetAllOscFrequencies(const float new_frequency) {
+void WaveGenerator::AddVCA(VCA* vca) {
+    amplifier_ = vca;
+}
+
+void WaveGenerator::NoteOn(const float new_frequency, const float amplitude) {
     std::cout << "New Frequency: "<<new_frequency<<std::endl;
-    for (Oscillator* osc : oscillators_) {
+    for (VCO* osc : oscillators_) {
         osc->SetFrequency(new_frequency);
     }
+
+    amplifier_->SetGainIn(amplitude);
 }
 
 inline void WaveGenerator::ClearStereoWaveform(float** out, uint32_t num_samples) {
@@ -81,4 +89,8 @@ void WaveGenerator::HandleKnobTurn(const unsigned int knob_id, const float knob_
         default:
             break;
     }
+}
+
+void WaveGenerator::NoteOff() {
+    amplifier_->SetGainIn(0.0);
 }

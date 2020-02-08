@@ -4,7 +4,7 @@
 #include "waveform.hpp"
 #include "oscillator.hpp"
 
-class TriangleWave : public Oscillator {
+class TriangleWave : public VCO {
 public:
     TriangleWave(const float sample_rate_hz, const float frequency, const float amplitude);
     int generate(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, 

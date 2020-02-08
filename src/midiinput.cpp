@@ -26,7 +26,7 @@ void midiEventCallback( double deltatime, std::vector< unsigned char > *message,
             && caller != NULL
             && caller->midiNoteOnCallback != NULL) {
         NoteOnEvent evt = NoteOnEvent(deltatime, message, userData);
-        caller->midiNoteOnCallback(evt.frequency_);
+        caller->midiNoteOnCallback(evt.frequency_,evt.velocity_);
     } else if (eventtype == NOTE_OFF
             && caller != NULL
             && caller->midiNoteOffCallback != NULL) {

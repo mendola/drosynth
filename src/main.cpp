@@ -37,11 +37,17 @@ int main(int, char *[])
 		Squarewave sq = Squarewave(SAMPLE_RATE, 100, 0.125);
 		TriangleWave tr = TriangleWave(SAMPLE_RATE, 100, 0.125);
 
+		VCA vca = VCA();
+
 		MidiInput minilogue;
 		minilogue.Start();
-		minilogue.SetExternalNoteOnCallback((noteoncallback)std::bind(&WaveGenerator::SetAllOscFrequencies,
+		minilogue.SetExternalNoteOnCallback((noteoncallback)std::bind(&WaveGenerator::NoteOn,
 																	  &waveGenerator,
-																	  std::placeholders::_1));
+																	  std::placeholders::_1,
+																	  std::placeholders::_2));
+
+		minilogue.SetExternalNoteOffCallback((noteoffcallback)std::bind(&WaveGenerator::NoteOff,
+																	  &waveGenerator));
 
 		minilogue.SetExternalKnobTurnCallback((knobturncallback)std::bind(&WaveGenerator::HandleKnobTurn,
 																	  &waveGenerator,
@@ -51,9 +57,10 @@ int main(int, char *[])
 		sw.Detune(1.0);
 		sq.Detune(1.0);
 		tr.Detune(1.0);
-		waveGenerator.AddOscillator(&sw);
-		waveGenerator.AddOscillator(&sq);
-		waveGenerator.AddOscillator(&tr);
+		waveGenerator.AddVCO(&sw);
+		waveGenerator.AddVCO(&sq);
+		waveGenerator.AddVCO(&tr);
+		waveGenerator.AddVCA(&vca);
 
 		std::cout << "Setting up PortAudio..." << std::endl;
 

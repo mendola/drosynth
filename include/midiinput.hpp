@@ -5,7 +5,7 @@
 #include <functional>
 
 //typedef void (*callbackfunction) (double, std::vector< unsigned char >*, void *);
-typedef std::function<void(float)> noteoncallback;
+typedef std::function<void(float,float)> noteoncallback;
 typedef std::function<void()> noteoffcallback;
 typedef std::function<void(unsigned int, float)> knobturncallback;
 
