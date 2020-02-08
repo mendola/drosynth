@@ -58,10 +58,25 @@ void WaveGenerator::SetMasterVolume(const float new_amplitude) {
     master_volume_ = new_amplitude;
 }
 
+void WaveGenerator::SetSingleOscAmplitude(const unsigned int idx, const float amplitude) {
+    if (idx < oscillators_.size()) {
+        oscillators_.at(idx)->SetAmplitude(amplitude);
+    }
+}
+
 void WaveGenerator::HandleKnobTurn(const unsigned int knob_id, const float knob_value) {
     switch (knob_id) {
         case 34:
             SetMasterVolume(knob_value);
+            break;
+        case 35:
+            SetSingleOscAmplitude(0, knob_value);
+            break;
+        case 37:
+            SetSingleOscAmplitude(1, knob_value);
+            break;
+        case 40:
+            SetSingleOscAmplitude(2, knob_value);
             break;
         default:
             break;

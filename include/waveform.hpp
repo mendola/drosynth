@@ -13,6 +13,7 @@ public:
 	void SetAllOscFrequencies(const float new_frequency);
 	void SetMasterVolume(const float new_amplitude);
 	void HandleKnobTurn(const unsigned int knob_id, const float knob_value);
+	void SetSingleOscAmplitude(const unsigned int idx, const float amplitude);
 private:
 	inline void ClearStereoWaveform(float** out, uint32_t num_samples);
 	inline void ScaleStereoWaveformVolume(float** out, uint32_t num_samples);

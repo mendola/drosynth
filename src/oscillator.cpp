@@ -22,3 +22,7 @@ void Oscillator::SetFrequency(const float new_frequency) {
 void Oscillator::Detune(const float detune_factor) {
     detune_factor_ = detune_factor;
 }
+
+void Oscillator::SetAmplitude(const float amplitude) {
+    amplitude_ = amplitude;
+}

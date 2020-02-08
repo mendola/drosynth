@@ -33,8 +33,7 @@ int main(int, char *[])
 	try
 	{
 		WaveGenerator waveGenerator;//TABLE_SIZE, SAMPLE_RATE, frequency);
-		Sinewave sw = Sinewave(SAMPLE_RATE, 100, 0.425);
-		Sinewave sw2 = Sinewave(SAMPLE_RATE, 100, 0.1);
+		Sinewave sw = Sinewave(SAMPLE_RATE, 100, 0.125);
 		Squarewave sq = Squarewave(SAMPLE_RATE, 100, 0.125);
 		TriangleWave tr = TriangleWave(SAMPLE_RATE, 100, 0.125);
 
@@ -49,12 +48,10 @@ int main(int, char *[])
 																	  std::placeholders::_1,
 																	  std::placeholders::_2));
 	
-		sw.Detune(2.0);
-		sw2.Detune(1.0);
-		//sw2.Detune(2);
-		tr.Detune(1);
+		sw.Detune(1.0);
+		sq.Detune(1.0);
+		tr.Detune(1.0);
 		waveGenerator.AddOscillator(&sw);
-		//waveGenerator.AddOscillator(&sw2);
 		waveGenerator.AddOscillator(&sq);
 		waveGenerator.AddOscillator(&tr);
 
