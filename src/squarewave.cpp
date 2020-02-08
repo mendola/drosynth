@@ -18,7 +18,7 @@ inline void Squarewave::SuperimposeNextSamples(float** out, uint32_t num_samples
     if (out == NULL || *out==NULL) return;
 
     for (uint32_t i=0; i<num_samples; ++i) {
-        float new_sample = continuous_sample_index_ >= (period_in_fractional_samples_ / 2) ? amplitude_ : -amplitude_;
+        float new_sample = continuous_sample_index_ <= (period_in_fractional_samples_ / 2) ? amplitude_ : -amplitude_;
 
         out[0][i] += new_sample;
         out[1][i] += new_sample;

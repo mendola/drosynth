@@ -17,12 +17,12 @@ inline float TriangleWave::computeAt(const uint32_t idx) {
 
 inline void TriangleWave::SuperimposeNextSamples(float** out, uint32_t num_samples) {
     if (out == NULL || *out==NULL) return;
-    const float dy_dsample = amplitude_ / period_in_fractional_samples_ / 4;
-    const uint32_t pos_peak_idx = period_in_fractional_samples_ / 4;
-    const uint32_t neg_peak_idx =  period_in_fractional_samples_ * 3 / 4;
+    const float dy_dsample = amplitude_ / period_in_fractional_samples_ * 4.0;
+    const float pos_peak_idx = period_in_fractional_samples_ / 4.0;
+    const float neg_peak_idx =  period_in_fractional_samples_ * 3.0 / 4.0;
     static float new_sample = 0;
     for (uint32_t i=0; i<num_samples; ++i) {
-        if (continuous_sample_index_ < pos_peak_idx) {
+        if (continuous_sample_index_ < static_cast<float>(pos_peak_idx)) {
             new_sample = continuous_sample_index_ * dy_dsample;
         } else if (continuous_sample_index_ < neg_peak_idx) {
             new_sample = (2. * amplitude_) - ((continuous_sample_index_ - pos_peak_idx) * dy_dsample) ;
