@@ -5,6 +5,7 @@
 #include "voice.hpp"
 #include "vca.hpp"
 #include "midiinput.hpp"
+#include "simplified_ladder.hpp"
 #include "portaudiocpp/PortAudioCpp.hxx"
 
 static constexpr unsigned int NUM_VOICES = 5;
@@ -33,6 +34,9 @@ public:
 	void SetGain(const float new_gain);
 	void SetMasterVolume(const float new_amplitude);
 
+	// Filter modulation
+	void SetFilterCutoff(const float normalized_cutoff);
+
 private:
 	inline void ClearStereoWaveform(float** out, uint32_t num_samples);
 	inline void ScaleStereoWaveformVolume(float** out, uint32_t num_samples);
@@ -45,6 +49,8 @@ protected:
 	std::vector<Voice*> voices_;
 
 	VCA* amplifier_;
+
+	SimpleLadder* lpf_;
 
 	float master_volume_ = 1.0;
 

@@ -21,6 +21,8 @@ set(SOURCES
     src/oscillator.cpp
     src/vca.cpp
     src/voice.cpp
+    src/filter.cpp
+    src/simplified_ladder.cpp
     src/SineWave.cpp
     src/squarewave.cpp
     src/trianglewave.cpp

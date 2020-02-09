@@ -26,7 +26,9 @@ Synthesizer::Synthesizer() {
     }
     std::cout << total_num_oscillators_ << std::endl;
 	VCA *vca = new VCA();
+    SimpleLadder *lpf = new SimpleLadder();
     amplifier_ = vca;
+    lpf_ = lpf;
 
     minilogue.Start();
     minilogue.SetExternalNoteOnCallback((noteoncallback)std::bind(&Synthesizer::NoteOn,
@@ -59,7 +61,9 @@ int Synthesizer::generate(const void *inputBuffer, void *outputBuffer, unsigned 
     }
     amplifier_->OperateOnSignal(out, framesPerBuffer);
 
+
     ScaleStereoWaveformVolume(out, framesPerBuffer);
+    lpf_->OperateOnSignal(out, framesPerBuffer);
     
     return paContinue;
 }
@@ -160,9 +164,14 @@ void Synthesizer::HandleKnobTurn(const unsigned int knob_id, const float knob_va
         case 40:
             SetSingleOscAmplitude(2, knob_value);
             break;
+        case 43:
+            SetFilterCutoff(knob_value);
         default:
             break;
     }
 }
 
-
+void Synthesizer::SetFilterCutoff(const float normalized_cutoff) {
+    std::cout <<normalized_cutoff<<std::endl;
+    lpf_->SetCutoffFreq(normalized_cutoff * 15000.0);
+}
