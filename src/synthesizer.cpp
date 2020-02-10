@@ -25,9 +25,11 @@ Synthesizer::Synthesizer() {
         total_num_oscillators_ += 3;
     }
     std::cout << total_num_oscillators_ << std::endl;
-	VCA *vca = new VCA();
+	//VCA *vca = new VCA();
     SimpleLadder *lpf = new SimpleLadder();
-    amplifier_ = vca;
+    //amplifier_ = vca;
+    ADSR * adsr = new ADSR();
+    adsr_ = adsr;
     lpf_ = lpf;
 
     minilogue.Start();
@@ -59,7 +61,9 @@ int Synthesizer::generate(const void *inputBuffer, void *outputBuffer, unsigned 
     for (Voice* voice : voices_) {
         voice->OperateOnSignal(out, framesPerBuffer);
     }
-    amplifier_->OperateOnSignal(out, framesPerBuffer);
+    
+    adsr_->OperateOnSignal(out, framesPerBuffer);
+    //amplifier_->OperateOnSignal(out, framesPerBuffer);
 
 
     ScaleStereoWaveformVolume(out, framesPerBuffer);
@@ -99,7 +103,8 @@ void Synthesizer::NoteOn(NoteOnEvent evt) {
     }
 
     if (keys_pressed_.size() <= 1) {
-        amplifier_->SetGainIn(evt.velocity_);
+        //amplifier_->SetGainIn(evt.velocity_);
+        adsr_->SetTriggerState(true);
     }
 }
 
@@ -115,8 +120,7 @@ void Synthesizer::NoteOff(NoteOffEvent evt) {
     }
 
     if (keys_pressed_.size() < 1) {
-        // TODO when ADSR is added, this should set an input there instead.
-        amplifier_->SetGainIn(0.0);
+        adsr_->SetTriggerState(false);
     }
 }
 
@@ -166,6 +170,19 @@ void Synthesizer::HandleKnobTurn(const unsigned int knob_id, const float knob_va
             break;
         case 43:
             SetFilterCutoff(knob_value);
+            break;
+        case 16:
+            adsr_->SetAttack(knob_value);
+            break;
+        case 17:
+            adsr_->SetDecay(knob_value);
+            break;
+        case 18:
+            adsr_->SetSustain(knob_value);
+            break;
+        case 19:
+            adsr_->SetRelease(knob_value);
+            break;
         default:
             break;
     }

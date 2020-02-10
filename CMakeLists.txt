@@ -20,6 +20,7 @@ set(SOURCES
     src/synthesizer.cpp
     src/oscillator.cpp
     src/vca.cpp
+    src/adsr.cpp
     src/voice.cpp
     src/filter.cpp
     src/simplified_ladder.cpp

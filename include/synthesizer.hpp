@@ -4,6 +4,7 @@
 
 #include "voice.hpp"
 #include "vca.hpp"
+#include "adsr.hpp"
 #include "midiinput.hpp"
 #include "simplified_ladder.hpp"
 #include "portaudiocpp/PortAudioCpp.hxx"
@@ -48,9 +49,11 @@ protected:
 
 	std::vector<Voice*> voices_;
 
-	VCA* amplifier_;
-
 	SimpleLadder* lpf_;
+
+	ADSR* adsr_;
+
+	VCA* amplifier_;
 
 	float master_volume_ = 1.0;
 
