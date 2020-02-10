@@ -18,6 +18,7 @@ NoteOnEvent::NoteOnEvent(double timeStamp, std::vector<unsigned char> *message, 
     frequency_ = ParseFrequency();
     velocity_ = ParseVelocity();
     event_type_ = NOTE_ON;
+    key_id_ = (float)message_->at(1) - 12.0 * OCTAVE_OFFSET;
 }
 
 inline float NoteOnEvent::ParseFrequency() {
@@ -35,6 +36,7 @@ NoteOffEvent::NoteOffEvent(double timeStamp, std::vector<unsigned char> *message
     frequency_ = ParseFrequency();
     velocity_ = 0;
     event_type_ = NOTE_OFF;
+    key_id_ = (float)message_->at(1) - 12.0 * OCTAVE_OFFSET;
 }
 
 inline float NoteOffEvent::ParseFrequency() {

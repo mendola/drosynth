@@ -20,6 +20,8 @@ SimpleLadder::SimpleLadder() {
 }
 
 void SimpleLadder::OperateOnSignal(float** out, unsigned int num_samples) {
+    static float min = 0.0;
+    static float max = 0.0;
     float g = gain_;
     float h = h_;
     float h0 = h0_;
@@ -44,11 +46,13 @@ void SimpleLadder::OperateOnSignal(float** out, unsigned int num_samples) {
         out[0][i] = output_;
         out[1][i] = output_;
     }
-    locked_ = false;
+    if (output_ > max) {
+        max = output_;
+ //       std::cout << max << std::endl;
+    }
 }
 
 void SimpleLadder::SetCutoffFreq(const float freq) {
-    while (locked_) {};
     cutoff_frequency_ = freq;
     std::cout << cutoff_frequency_ << std::endl;
     // Not being oversampled at the moment... * 2 when functional

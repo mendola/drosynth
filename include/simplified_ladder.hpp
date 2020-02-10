@@ -18,6 +18,4 @@ private:
     float h0_;
     float gain_;
     float gain_compensation_;
-
-    bool locked_ = false;
 };
