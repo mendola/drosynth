@@ -19,17 +19,19 @@ typedef struct note {
 class Synthesizer {
 public:
 	Synthesizer();
-	//void AddVCO(VCO* osc); 
-	void AddVCA(VCA* vca);
     int generate(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, 
 		const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags);
 	void HandleKnobTurn(const unsigned int knob_id, const float knob_value);
 	void NoteOff(NoteOffEvent evt);
 	void NoteOn(NoteOnEvent evt);
 
-	// Oscillator modulation 
+	// Voice modulation 
 	void SetAllOscFrequencies(const float new_frequency);
 	void SetSingleOscAmplitude(const unsigned int idx, const float amplitude);
+    void SetAllAttack(const float knob_value);
+    void SetAllDecay(const float knob_value);
+    void SetAllSustain(const float knob_value);
+    void SetAllRelease(const float knob_value);
 
 	// Amplifier modulation
 	void SetGain(const float new_gain);
@@ -50,8 +52,6 @@ protected:
 	std::vector<Voice*> voices_;
 
 	SimpleLadder* lpf_;
-
-	ADSR* adsr_;
 
 	VCA* amplifier_;
 

@@ -18,18 +18,16 @@ Synthesizer::Synthesizer() {
         Sinewave *sw = new Sinewave(SAMPLE_RATEB, 100, 0.125);
         Squarewave *sq = new Squarewave(SAMPLE_RATEB, 100, 0.125);
         TriangleWave *tr = new TriangleWave(SAMPLE_RATEB, 100, 0.125);
+        ADSR *adsr = new ADSR();
         voice->AddVCO(sw);
         voice->AddVCO(sq);
         voice->AddVCO(tr);
+        voice->SetADSR(adsr);
         voices_.push_back(voice);
         total_num_oscillators_ += 3;
     }
-    std::cout << total_num_oscillators_ << std::endl;
 	//VCA *vca = new VCA();
     SimpleLadder *lpf = new SimpleLadder();
-    //amplifier_ = vca;
-    ADSR * adsr = new ADSR();
-    adsr_ = adsr;
     lpf_ = lpf;
 
     minilogue.Start();
@@ -62,26 +60,10 @@ int Synthesizer::generate(const void *inputBuffer, void *outputBuffer, unsigned 
         voice->OperateOnSignal(out, framesPerBuffer);
     }
     
-    adsr_->OperateOnSignal(out, framesPerBuffer);
-    //amplifier_->OperateOnSignal(out, framesPerBuffer);
-
-
     ScaleStereoWaveformVolume(out, framesPerBuffer);
-    lpf_->OperateOnSignal(out, framesPerBuffer);
-    
+
+    //lpf_->OperateOnSignal(out, framesPerBuffer);
     return paContinue;
-}
-
-// void Synthesizer::AddVCO(VCO* osc) {
-//     for (Voice* voice : voices_) {
-        
-//     }
-
-//     oscillators_.push_back(osc);
-// }
-
-void Synthesizer::AddVCA(VCA* vca) {
-    amplifier_ = vca;
 }
 
 void Synthesizer::NoteOn(NoteOnEvent evt) {
@@ -101,11 +83,6 @@ void Synthesizer::NoteOn(NoteOnEvent evt) {
             break;
         }
     }
-
-    if (keys_pressed_.size() <= 1) {
-        //amplifier_->SetGainIn(evt.velocity_);
-        adsr_->SetTriggerState(true);
-    }
 }
 
 void Synthesizer::NoteOff(NoteOffEvent evt) {
@@ -117,10 +94,6 @@ void Synthesizer::NoteOff(NoteOffEvent evt) {
             keys_pressed_.erase(keys_pressed_.begin() + i);
             break;
         }
-    }
-
-    if (keys_pressed_.size() < 1) {
-        adsr_->SetTriggerState(false);
     }
 }
 
@@ -172,16 +145,16 @@ void Synthesizer::HandleKnobTurn(const unsigned int knob_id, const float knob_va
             SetFilterCutoff(knob_value);
             break;
         case 16:
-            adsr_->SetAttack(knob_value);
+            SetAllAttack(knob_value);
             break;
         case 17:
-            adsr_->SetDecay(knob_value);
+            SetAllDecay(knob_value);
             break;
         case 18:
-            adsr_->SetSustain(knob_value);
+            SetAllSustain(knob_value);
             break;
         case 19:
-            adsr_->SetRelease(knob_value);
+            SetAllRelease(knob_value);
             break;
         default:
             break;
@@ -189,6 +162,29 @@ void Synthesizer::HandleKnobTurn(const unsigned int knob_id, const float knob_va
 }
 
 void Synthesizer::SetFilterCutoff(const float normalized_cutoff) {
-    std::cout <<normalized_cutoff<<std::endl;
     lpf_->SetCutoffFreq(normalized_cutoff * 15000.0);
+}
+
+void Synthesizer::SetAllAttack(const float knob_value) {
+    for (Voice* voice : voices_) {
+        voice->SetAttack(knob_value);
+    }
+}
+
+void Synthesizer::SetAllDecay(const float knob_value) {
+    for (Voice* voice : voices_) {
+        voice->SetDecay(knob_value);
+    }
+}
+
+void Synthesizer::SetAllSustain(const float knob_value) {
+    for (Voice* voice : voices_) {
+        voice->SetSustain(knob_value);
+    }
+}
+
+void Synthesizer::SetAllRelease(const float knob_value) {
+    for (Voice* voice : voices_) {
+        voice->SetRelease(knob_value);
+    }
 }

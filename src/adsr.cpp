@@ -1,9 +1,16 @@
 #include "adsr.hpp"
 
 #include <iostream>
+
 static constexpr float MAX_ATTACK_SAMPLES = 88000;
 static constexpr float MAX_DECAY_SAMPLES = 88000;
 static constexpr float MAX_RELEASE_SAMPLES = 88000;
+
+template <typename T>
+static inline unsigned int CLAMP_TO_MIN(T& var, T min) {
+    var = (var < min) ? min : var;
+}
+
 
 ADSR::ADSR() {
     SetAttack(0.5);
@@ -18,7 +25,7 @@ void ADSR::SetTriggerState(const bool trig) {
         curr_sample_idx_ = 0;
         curr_output_ = 0;
     } else {
-        std::cout<<release_slope_<< std::endl;
+         release_slope_ = -curr_output_ / static_cast<float>(release_time_samples_);     
     }
 }
 
@@ -45,6 +52,8 @@ void ADSR::OperateOnSignal(float** out, unsigned int num_samples) {
                 curr_output_ = sustain_level_norm;
             }
             ++curr_sample_idx_;
+            //std::cout << curr_output_ <<std::endl;
+
         } else {
             curr_output_ += release_slope_;
             if (curr_output_ < 0.0) {
@@ -53,33 +62,38 @@ void ADSR::OperateOnSignal(float** out, unsigned int num_samples) {
             } else {
                 ++curr_sample_idx_;
             }
-         //   std::cout << curr_output_ <<std::endl;
+            //std::cout << curr_output_ <<std::endl;
         }
-        //std::cout << curr_output_ << std::endl;
         out[0][i] *= curr_output_;
         out[1][i] *= curr_output_;
-
     }
 }
 
 void ADSR::SetAttack(const float norm_attack) {
     attack_time_samples_ = static_cast<unsigned int>(norm_attack * MAX_ATTACK_SAMPLES);
+    CLAMP_TO_MIN<unsigned int>(attack_time_samples_, 1);
     attack_slope_ = 1.0 / attack_time_samples_;
+    std::cout << "Attack samples" << attack_time_samples_ << std::endl;
 }
 
 void ADSR::SetDecay(const float norm_decay) {
     decay_time_samples_ = static_cast<unsigned int>(norm_decay * MAX_DECAY_SAMPLES);
+    CLAMP_TO_MIN<unsigned int>(decay_time_samples_, 1);
     decay_slope_ = -(1.0 - sustain_level_norm_)  / decay_time_samples_;
+    std::cout << "decay samples: " << decay_time_samples_ << std::endl;
 }
 
 void ADSR::SetSustain(const float norm_sustain) {
     sustain_level_norm_ = norm_sustain;
-    SetDecay(decay_time_samples_);
-    SetRelease(release_time_samples_);
+    CLAMP_TO_MIN<float>(sustain_level_norm_,0.00000001);
+    SetDecay(static_cast<float>(decay_time_samples_/ MAX_DECAY_SAMPLES));
+    SetRelease(static_cast<float>(release_time_samples_ / MAX_RELEASE_SAMPLES));
+    std::cout << "Sustain: " <<sustain_level_norm_ << std::endl;
 }
 
 void ADSR::SetRelease(const float norm_release) {
     release_time_samples_ = static_cast<unsigned int>(norm_release * MAX_RELEASE_SAMPLES);
+    CLAMP_TO_MIN<unsigned int>(release_time_samples_, 1);
     release_slope_ = -sustain_level_norm_ / static_cast<float>(release_time_samples_); 
-    //std::cout << "Release slope " << release_slope_ << std::endl;
+    std::cout << "Release slope " << release_time_samples_ << std::endl;
 }

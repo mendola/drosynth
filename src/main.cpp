@@ -13,7 +13,6 @@
 // Some constants:
 const int NUM_SECONDS = 5;
 const double SAMPLE_RATE = 44100.0;
-const int FRAMES_PER_BUFFER = 64;
 const int TABLE_SIZE = 200;
 
 // ---------------------------------------------------------------------------------------
