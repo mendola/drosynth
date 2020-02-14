@@ -62,7 +62,7 @@ int Synthesizer::generate(const void *inputBuffer, void *outputBuffer, unsigned 
     
     ScaleStereoWaveformVolume(out, framesPerBuffer);
 
-    //lpf_->OperateOnSignal(out, framesPerBuffer);
+    lpf_->OperateOnSignal(out, framesPerBuffer);
     return paContinue;
 }
 

@@ -1,7 +1,7 @@
 #include "midievent.hpp"
 #include <math.h>
 
-static constexpr int OCTAVE_OFFSET = 4;
+static constexpr int OCTAVE_OFFSET = 6;
 
 /************ MidiEvent **************************/
 MidiEvent::MidiEvent(double timeStamp, std::vector<unsigned char> *message, void *userData) {
