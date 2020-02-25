@@ -17,6 +17,11 @@ private:
     unsigned int decay_time_samples_ = 0;
     float sustain_level_norm_ = 0;
     unsigned int release_time_samples_ = 44100;
+    float norm_attack_;
+    float norm_decay_;
+    float norm_sustain_;
+    float norm_release_;
+
 
     // Internal State
     bool is_triggered_ = false;

@@ -77,29 +77,33 @@ void ADSR::OperateOnSignal(float** out, unsigned int num_samples) {
 }
 
 void ADSR::SetAttack(const float norm_attack) {
-    attack_time_samples_ = static_cast<unsigned int>(lin2exp(norm_attack) * MAX_ATTACK_SAMPLES);
+    norm_attack_ = norm_attack;
+    attack_time_samples_ = static_cast<unsigned int>(lin2exp(norm_attack_) * MAX_ATTACK_SAMPLES);
     CLAMP_TO_MIN<unsigned int>(attack_time_samples_, 1);
     attack_slope_ = 1.0 / attack_time_samples_;
     std::cout << "Attack samples" << attack_time_samples_ << std::endl;
 }
 
 void ADSR::SetDecay(const float norm_decay) {
-    decay_time_samples_ = static_cast<unsigned int>(lin2exp(norm_decay) * MAX_DECAY_SAMPLES);
+    norm_decay_ = norm_decay;
+    decay_time_samples_ = static_cast<unsigned int>(lin2exp(norm_decay_) * MAX_DECAY_SAMPLES);
     CLAMP_TO_MIN<unsigned int>(decay_time_samples_, 1);
     decay_slope_ = -(1.0 - sustain_level_norm_)  / decay_time_samples_;
     std::cout << "decay samples: " << decay_time_samples_ << std::endl;
 }
 
 void ADSR::SetSustain(const float norm_sustain) {
-    sustain_level_norm_ = norm_sustain;
+    norm_sustain_ = norm_sustain;
+    sustain_level_norm_ = norm_sustain_;
     CLAMP_TO_MIN<float>(sustain_level_norm_,0.00000001);
-    SetDecay(static_cast<float>(decay_time_samples_/ MAX_DECAY_SAMPLES));
-    SetRelease(static_cast<float>(release_time_samples_ / MAX_RELEASE_SAMPLES));
+    SetDecay(norm_decay_);
+    SetRelease(norm_release_);
     std::cout << "Sustain: " <<sustain_level_norm_ << std::endl;
 }
 
 void ADSR::SetRelease(const float norm_release) {
-    release_time_samples_ = static_cast<unsigned int>(lin2exp(norm_release) * MAX_RELEASE_SAMPLES);
+    norm_release_ = norm_release;
+    release_time_samples_ = static_cast<unsigned int>(lin2exp(norm_release_) * MAX_RELEASE_SAMPLES);
     CLAMP_TO_MIN<unsigned int>(release_time_samples_, 1);
     release_slope_ = -sustain_level_norm_ / static_cast<float>(release_time_samples_); 
     std::cout << "Release slope " << release_time_samples_ << std::endl;
