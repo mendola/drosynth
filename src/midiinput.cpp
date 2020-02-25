@@ -13,12 +13,12 @@ void midiEventCallback( double deltatime, std::vector< unsigned char > *message,
 {
     MidiInput* caller = (MidiInput*)userData;
     unsigned int nBytes = message->size();
-    // for ( unsigned int i=0; i<nBytes; i++ ) {
-    //     std::cout << "Byte " << i << " = " << (int)message->at(i) << ", ";
-    // }
-    // if ( nBytes > 0 ) {
-    //     std::cout << "stamp = " << deltatime << std::endl;
-    // }
+    for ( unsigned int i=0; i<nBytes; i++ ) {
+        std::cout << "Byte " << i << " = " << (int)message->at(i) << ", ";
+    }
+    if ( nBytes > 0 ) {
+        std::cout << "stamp = " << deltatime << std::endl;
+    }
 
     eventtype_t eventtype = GetMidiEventType(deltatime, message, userData);
 

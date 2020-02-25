@@ -167,6 +167,9 @@ void Synthesizer::HandleKnobTurn(const unsigned int knob_id, const float knob_va
         case 19:
             SetAllRelease(knob_value);
             break;
+        case 44:
+            SetFilterResonance(knob_value);
+            break;
         default:
             break;
     }
@@ -174,6 +177,10 @@ void Synthesizer::HandleKnobTurn(const unsigned int knob_id, const float knob_va
 
 void Synthesizer::SetFilterCutoff(const float normalized_cutoff) {
     lpf_->SetCutoffFreq(normalized_cutoff * 15000.0);
+}
+
+void Synthesizer::SetFilterResonance(const float knob_value) {
+    lpf_->SetResonance(knob_value);
 }
 
 void Synthesizer::SetAllAttack(const float knob_value) {

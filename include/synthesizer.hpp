@@ -40,6 +40,7 @@ public:
 
 	// Filter modulation
 	void SetFilterCutoff(const float normalized_cutoff);
+	void SetFilterResonance(const float knob_value);
 
 private:
 	inline void ClearStereoWaveform(float** out, uint32_t num_samples);
