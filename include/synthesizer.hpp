@@ -6,7 +6,8 @@
 #include "vca.hpp"
 #include "adsr.hpp"
 #include "midiinput.hpp"
-#include "simplified_ladder.hpp"
+//#include "simplified_ladder.hpp"
+#include "huovilainen_ladder.hpp"
 #include "portaudiocpp/PortAudioCpp.hxx"
 
 static constexpr unsigned int NUM_VOICES = 5;
@@ -51,7 +52,8 @@ protected:
 
 	std::vector<Voice*> voices_;
 
-	SimpleLadder* lpf_;
+	//SimpleLadder* lpf_;
+	HuovilainenLadder* lpf_;
 
 	VCA* amplifier_;
 

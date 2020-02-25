@@ -16,7 +16,7 @@ static inline unsigned int CLAMP_TO_MIN(T& var, T min) {
 
 
 static float lin2exp(const float linear_val) {
-    return (exp(linear_val) - 1.0) / (e - 1);
+    return (exp(3*linear_val) - 1.0) / (e*e*e - 1);
 }
 
 ADSR::ADSR() {

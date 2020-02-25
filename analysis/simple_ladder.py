@@ -1,9 +1,19 @@
-from scipy.signal import freqz
+from scipy.signal import freqz, medfilt
 import numpy as np
-from math import pi, tanh
+from math import pi, tanh, ceil
 import matplotlib.pyplot as plt
-
+from control import mag2db
 import pdb
+
+def moving_avg(samples, windowsizee):
+    output = []
+    curr_output = 0.0
+    for x in samples:
+        windowsize = windowsizee/1000 + 1
+        curr_output = (float(x) * (1.0/float(windowsize)) + curr_output * float(windowsize - 1) / float(windowsize))
+        output.append(curr_output)
+    return output
+
 def simple_ladder(samples, cutoff_hz, Fs):
     stage = [0,0,0,0]
     stage_Z1 = [0,0,0,0]
@@ -18,7 +28,7 @@ def simple_ladder(samples, cutoff_hz, Fs):
     # FIR part with gain g
     h = gain / 1.3
     h0 = gain * 0.3 / 1.3
-    resonance = 0   
+    resonance = 0
     
     for i in range(len(samples)):
         for stage_idx in range(4):
@@ -44,20 +54,45 @@ def simple_ladder(samples, cutoff_hz, Fs):
     return output_samples
     
 if __name__ == "__main__":
-    impulse = [1] + [0]*499
-    cutoffs = np.linspace(7000,12000,10)
-    fig = plt.figure()
+    impulse = [1] + [0]*500
+    #cutoffs = np.linspace(7000,12000,10)
+    cutoffs = np.linspace(20,22000,20)
+    fig1 = plt.figure()
+    fig2 = plt.figure()
     num_subplots = len(cutoffs)
-    MAX_PLOTS_PER_COLUMN = 5
-    NUM_COLUMNS = 2
-    NUM_ROWS = 5
+    MAX_ROWS_PER_COLUMN = 5
+    NUM_COLUMNS = min(num_subplots, MAX_ROWS_PER_COLUMN)
+    NUM_ROWS = ceil(num_subplots / NUM_COLUMNS)
     plot_id = 0
     for cutoff in cutoffs:
         plot_id += 1
+        L = 50;           #Number of taps in the filter.
+        omega_c = 0.25;   #Center frequency of the passband (2pi*rad/sample)
+
+        #Define the filter coefficients and get their response.
+       # h = 2/L * np.cos( 2*pi * omega_c * np.linspace( 0, L -1, L-1) )
         h = simple_ladder(impulse, cutoff, 44100)
-        curr_ax = plt.subplot(NUM_COLUMNS,NUM_ROWS,plot_id)
-        curr_ax.title.set_text("Cutoff: %d Hz" % (cutoff))
-        plt.stem(h,use_line_collection=True)
+        #h = [1,1] + [0] * 498
+        #h = moving_avg(impulse, cutoff)
+        plt.figure(fig1.number)
+        curr_ax = plt.subplot(NUM_COLUMNS, NUM_ROWS, plot_id)
+        plt.stem(h,use_line_collection=True, markerfmt=" ", label="Cutoff: %d Hz" % (cutoff))
+        curr_ax.legend()
+        plt.grid(True)
+        
+        # Plot freqz
+        plt.figure(fig2.number)
+        curr_ax = plt.subplot(NUM_COLUMNS, NUM_ROWS, plot_id)
+        curr_ax.set_title('Digital filter frequency response')
+        w, h = freqz(h, 1, 5001)
+        angles = np.linspace(20,22500, 5001)
+        #angles = np.unwrap(np.angle(h))
+        plt.plot(angles, np.abs(h), 'g', label="Cutoff: %d Hz" % (cutoff))
+        plt.semilogy(np.linspace(0,22500, 5001),abs(h))
+        # plt.xlabel('Frequency (Hz)')
+        # plt.ylabel('Magnitude (dB)')
+        curr_ax.legend()
+        
         plt.grid(True)
 
     plt.show()

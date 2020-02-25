@@ -27,7 +27,8 @@ Synthesizer::Synthesizer() {
         total_num_oscillators_ += 3;
     }
 	//VCA *vca = new VCA();
-    SimpleLadder *lpf = new SimpleLadder();
+    HuovilainenLadder *lpf = new HuovilainenLadder(44100);
+    //SimpleLadder *lpf = new SimpleLadder();
     lpf_ = lpf;
 
     minilogue.Start();
@@ -63,6 +64,7 @@ int Synthesizer::generate(const void *inputBuffer, void *outputBuffer, unsigned 
     ScaleStereoWaveformVolume(out, framesPerBuffer);
 
     lpf_->OperateOnSignal(out, framesPerBuffer);
+   // std::cout << out[0][63] << std::endl;
     return paContinue;
 }
 
@@ -110,10 +112,19 @@ inline void Synthesizer::ScaleStereoWaveformVolume(float** out, uint32_t num_sam
     if (out == NULL || *out==NULL) return;
 
     const float net_scale = master_volume_ / total_num_oscillators_;
-
+    static float min = 0.0;
+    static float max = 0.0;
     for (size_t i=0; i<num_samples; ++i) {
         out[0][i] *= net_scale;
         out[1][i] *= net_scale;
+        if (out[0][i] > max) {
+           // std::cout <<out[0][i] <<std::endl;
+            max = out[0][i];
+        }
+        if (out[0][i] > 1.0) out[0][i] = 1.0;
+        if (out[0][i] < -1.0) out[0][i] = -1.0;
+        if (out[1][i] > 1.0) out[1][i] = 1.0;
+        if (out[1][i] < -1.0) out[1][i] = -1.0;
     }
 }
 

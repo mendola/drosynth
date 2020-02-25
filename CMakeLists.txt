@@ -24,6 +24,7 @@ set(SOURCES
     src/voice.cpp
     src/filter.cpp
     src/simplified_ladder.cpp
+    src/huovilainen_ladder.cpp
     src/SineWave.cpp
     src/squarewave.cpp
     src/trianglewave.cpp

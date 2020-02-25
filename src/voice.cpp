@@ -15,7 +15,7 @@ Voice::Voice() {
 
 void Voice::NoteOn(const float new_frequency) {
     voice_freq_ = new_frequency;
-    std::cout << "NoteOn"<<std::endl;
+    //std::cout << "NoteOn"<<std::endl;
     for (VCO* vco : oscillators_) {
         vco->SetFrequency(voice_freq_);
         vco->SetEnabled(true);

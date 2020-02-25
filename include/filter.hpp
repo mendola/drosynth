@@ -1,5 +1,7 @@
 #pragma once
 
+static constexpr float PI = 3.14159265;
+
 class Filter {
 public:
     void SetCutoffFreq(const float freq);

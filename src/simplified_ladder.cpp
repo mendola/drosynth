@@ -2,7 +2,6 @@
 #include <cstring>
 #include <math.h>
 #include <iostream>
-static constexpr float PI = 3.14159265;
 #define SNAP_TO_ZERO(n)    if (! (n < -1.0e-8 || n > 1.0e-8)) n = 0;
 
 SimpleLadder::SimpleLadder() {
@@ -43,12 +42,13 @@ void SimpleLadder::OperateOnSignal(float** out, unsigned int num_samples) {
         
         output_ = stage_[3];
         SNAP_TO_ZERO(output_);
+
         out[0][i] = output_;
         out[1][i] = output_;
     }
     if (output_ > max) {
         max = output_;
- //       std::cout << max << std::endl;
+       // std::cout << max << " " <<  stage_tanh_[3] << " " << stage_Z1_[3] << " " << stage_[3] << std::endl;
     }
 }
 
@@ -64,4 +64,5 @@ void SimpleLadder::SetCutoffFreq(const float freq) {
     // FIR part with gain g
     h_ = gain_ / 1.3;
     h0_ = gain_ * 0.3 / 1.3;
+    std::cout << gain_ << " " << h_ << " " << h0_ << std::endl;
 }
